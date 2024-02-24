@@ -1,3 +1,4 @@
 /CrowdCleanup/media/*
 test.py
 /CrowdCleanup/__pycache__
+*.pyc
