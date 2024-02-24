@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,18 +47,22 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         #map {
             height: 100%; /* Adjust height as needed */
             width: 100%;
         }
-        
+
+        #preview-container {
+            margin-top: 10px;
+        }
+
         #preview {
             max-width: 100%;
             height: auto;
-            margin-top: 10px;
+            display: none; /* Hide the image initially */
         }
-        
+
         .input-container {
             margin-top: 20px;
             width: 100%;
@@ -65,16 +70,16 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .input-container input[type="text"] {
             width: 80%;
             margin-bottom: 10px;
         }
-        
+
         .input-container input[type="file"] {
             width: 80%;
         }
-        
+
         .input-container button {
             margin-top: 10px;
             padding: 10px 20px;
@@ -83,12 +88,19 @@
             background-color: #f0f0f0;
             cursor: pointer;
         }
-        
+
         .input-container button:hover {
             background-color: #e0e0e0;
         }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Report Litter</h1>
@@ -102,45 +114,67 @@
             <!-- Content for the right half goes here -->
             <h2>Double click on the map to drop a pin!</h2>
             <h2>Write a short description of the litter.</h2>
-            <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data">
+            <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data" onsubmit="return checkPin()">
                 {% csrf_token %}
                 <input type="text" id="descInput" name="description" placeholder="Enter description">
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                <img id="preview" src="#" alt="Preview">
-                <button type="submit">Submit</button>
+                <div id="preview-container">
+                    <img id="preview" src="#" alt="Preview">
+                </div>
+                <button type="submit" id="submitButton">Submit</button>
+                <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
             </form>
         </div>
     </div>
-    
+
     <script>
         // Initialize the map
         var map = L.map('map');
 
         // Variable to store the last added marker
-        var lastMarker = null; 
+        var lastMarker = null;
         var lat = null;
-        var long = null;
+        var lng = null;
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         // Function to handle mouse down event
         function onMouseDown(e) {
             if (e.originalEvent.detail === 2) { // Check if it's a double-click
                 // Remove the last added marker, if exists
                 if (lastMarker) {
                     map.removeLayer(lastMarker);
-                    lat = null;
-                    long = null;
                 }
-                
+
                 // Add a new marker
                 lastMarker = L.marker(e.latlng).addTo(map);
-                lat = e.lat;
-                long = e.long;
+                lat = e.latlng.lat;
+                lng = e.latlng.lng;
+
+                // Fetch zip code and display
+                fetchZipCode(lat, lng);
+
+                // Hide pin error message
+                document.getElementById('pinErrorMessage').style.display = 'none';
             }
+        }
+
+        // Function to fetch zip code from latitude and longitude
+        function fetchZipCode(lat, lng) {
+            var xhr = new XMLHttpRequest();
+            var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+            xhr.open('GET', url, true);
+            xhr.onload = function () {
+                var data = JSON.parse(this.responseText);
+                if (data.address && data.address.postcode) {
+                    var zipCode = data.address.postcode;
+                    lastMarker.bindTooltip(zipCode).openTooltip();
+                }
+            };
+            xhr.send();
         }
 
         // Function to handle geolocation success
@@ -163,20 +197,31 @@
 
         // Disable default Leaflet behavior for double-click
         map.doubleClickZoom.disable();
-        
+
         // Function to preview the selected image
         function previewImage(event) {
             var input = event.target;
             var preview = document.getElementById('preview');
-            
+
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the preview image
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        // Function to check if a pin is placed before submission
+        function checkPin() {
+            if (!lastMarker) {
+                document.getElementById('pinErrorMessage').style.display = 'block';
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
     </script>
 </body>
+
 </html>
