@@ -110,14 +110,14 @@
             <!-- Content for the right half goes here -->
             <h2>Double click on the map to drop a pin!</h2>
             <h2>Write a short description of the litter.</h2>
-            <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data">
+            <form class="input-container" id="reportForm" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="text" id="descInput" name="description" placeholder="Enter description">
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
                 <div id="preview-container">
                     <img id="preview" src="#" alt="Preview">
                 </div>
-                <button type="submit">Submit</button>
+                <button type="button" onclick="submitForm()">Submit</button>
             </form>
         </div>
     </div>
@@ -187,6 +187,15 @@
                     previewContainer.style.display = 'block'; // Show the preview container
                 }
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Function to submit the form after checking if a pin is placed
+        function submitForm() {
+            if (!lastMarker) {
+                alert("Please place a pin before submitting!");
+            } else {
+                document.getElementById('reportForm').submit();
             }
         }
     </script>
