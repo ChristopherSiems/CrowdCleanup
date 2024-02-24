@@ -55,6 +55,9 @@
 </head>
 <body>
     <header>
+        <h1>Split Layout Example</h1>
+    </header>
+    <div class="container">
         <div class="half" id="left-half">
             <!-- Content for the left half goes here -->
             <div id="map"></div>
@@ -109,6 +112,7 @@
     <script>
         // Initialize the map
         var map = L.map('map');
+
         // Variable to store the last added marker
         var lastMarker = null; 
         var lat = null;
