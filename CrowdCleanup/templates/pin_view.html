@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    /* Stack children vertically */
+  }
+
+  header {
+    background-color: ivory;
+    text-align: center;
+    padding: 10px;
+  }
+
+  p {
+    font-size: larger;
+  }
+
+  .container {
+    display: flex;
+    flex: 1;
+  }
+
+  .half {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #left-half {
+    background-color: ivory;
+    /* Left half background color */
+  }
+
+  #right-half {
+    background-color: ivory;
+    /* Right half background color */
+  }
+
+  .tags {
+    font-size: medium;
+  }
+</style>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Litter @ {{pin.zip}}</title>
+</head>
+
+<body>
+  <header>
+    <h1>Litter @ {{pin.zip}}</h1>
+  </header>
+  <div class="container">
+    <div class="half" id="left-half">
+      <p>PLACEHOLDER</p>
+      <img src="{% static 'missing_texture.jpg' %}" alt="PLACEHOLDER">
+    </div>
+    <div class="half" id="right-half">
+      <p class="tags">{{pin.status}} {{pin.date}}</p>
+      <p>{{pin.description}}</p>
+      <address>Longitude: {{pin.long}} Latitude: {{pin.lat}}</address>
+      <address>{{pin.address}}</address>
+    </div>
+  </div>
+</body>
+
+</html>
