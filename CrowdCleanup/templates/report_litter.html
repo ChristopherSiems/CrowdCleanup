@@ -3,9 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello, World!</title>
+    <title>Leaflet Map with Double Click Marker Drop (No Zoom)</title>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Include Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <div id="map"></div>
+    <script>
+        // Initialize the map
+        var map = L.map('map');
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // Function to handle mouse down event
+        function onMouseDown(e) {
+            if (e.originalEvent.detail === 2) { // Check if it's a double-click
+                var marker = L.marker(e.latlng).addTo(map)
+                .on('click', function() {
+                    // Navigate to the desired page when marker is clicked
+                    window.location.href = "https://example.com/another-page.html";
+                });
+            }
+        }
+
+        // Function to handle geolocation success
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            
+        }
+
+        // Function to handle geolocation error
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Attempt to get user's current location
+        map.locate({ setView: true, maxZoom: 16 });
+
+        // Bind geolocation events
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+        map.on('mousedown', onMouseDown);
+
+        // Disable default Leaflet behavior for double-click
+        map.doubleClickZoom.disable();
+    </script>
 </body>
 </html>
