@@ -7,4 +7,3 @@ class Pin(models.Model):
   description = models.TextField()
   image = models.ImageField(upload_to='media/', null=True, blank=True)
   status = models.CharField( default='TO BE CLEANED', max_length = 13)
-  description = models.TextField()
