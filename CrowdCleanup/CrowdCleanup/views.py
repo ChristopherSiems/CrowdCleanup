@@ -11,3 +11,6 @@ def report_litter(request):
 def clean_litter(request):
     # Logic for cleaning up litter
     return render(request, 'clean_litter.html')  # Assuming you have a template named clean_litter.html
+
+def pin_view(request):
+  return render(request, 'pin_view.html')
