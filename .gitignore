@@ -2,4 +2,4 @@
 test.py
 /CrowdCleanup/__pycache__
 *.pyc
-*.pyc
+*.sqlite3
