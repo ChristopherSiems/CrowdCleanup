@@ -1,11 +1,48 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello, World!</title>
+    <title>Clean Litter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px; /* Adjust the width as needed */
+        }
+
+        .zip-code {
+            font-size: 16px; /* Adjust font size as needed */
+            margin-top: 20px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
+    <div class="container">
+        <p class="zip-code" id="current-zip-code"></p>
+
+<script>
+    // Retrieve the zip code from localStorage
+    var zipCode = localStorage.getItem('zipCode');
+
+    // Set the retrieved zip code as the text content of the paragraph element
+    document.getElementById('current-zip-code').textContent = "Current Zip Code: " + zipCode;
+</script>
+        <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
+    </div>
 </body>
+
 </html>

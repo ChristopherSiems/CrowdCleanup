@@ -1,44 +1,5 @@
 {% load static %}
 <!DOCTYPE html>
-<style>
-  body {
-    margin: auto;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    flex-direction: column;
-    width: 75%;
-    background-color: ivory;
-  }
-
-  header {
-    text-align: center;
-    padding: 10px;
-  }
-
-  p {
-    font-size: larger;
-  }
-
-  img {
-    max-width: 100%;
-    max-height: 50%;
-  }
-
-  .container {
-    display: flex;
-    flex: 1;
-  }
-
-  .half {
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .tags {
-    font-size: medium;
-  }
-</style>
 <html lang="en">
 
 <head>
@@ -50,58 +11,110 @@
   <!-- Include Leaflet JavaScript -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
+      body {
+          margin: auto;
+          padding: 0;
+          display: flex;
+          height: 100vh;
+          flex-direction: column;
+          width: 75%;
+          background-color: ivory;
+      }
+
+      header {
+          text-align: center;
+          padding: 10px;
+      }
+
+      p {
+          font-size: larger;
+      }
+
+      img {
+          max-width: 100%;
+          max-height: 50%;
+      }
+
+      .container {
+          display: flex;
+          flex: 1;
+      }
+
+      .half {
+          flex: 1;
+          overflow: hidden;
+      }
+
+      .tags {
+          font-size: medium;
+      }
+      
       #map {
-          height:50%;
-          width:100%;
+          height: 50%;
+          width: 100%;
       }
   </style>
-  
-  <title>Litter @ {{pin.zip}}</title>
-
 </head>
 
 <body>
   <header>
-    <h1>Litter @ {{pin.zip}}</h1>
+    <h1>Litter @ {{ pin.zip }}</h1>
   </header>
   <div class="container">
     <div class="half" id="left-half">
       <div id="map"></div>
-      {%if pin.image%}
-      <img src="{{pin.image.url}}" alt="PLACEHOLDER">
-      {%endif%}
+      {% if pin.image %}
+      <img src="{{ pin.image.url }}" alt="PLACEHOLDER">
+      {% endif %}
     </div>
     <div class="half" id="right-half">
-      <p class="tags"><span style="float: left;">{{pin.status}}</span>
-        <span style="float: right;">{{pin.date|date:"Y-m-d"}}</span>
+      <p class="tags">
+        <span style="float: left;">{{ pin.status }}</span>
+        <span style="float: right;">{{ pin.date|date:"Y-m-d" }}</span>
       </p>
       <br>
-      <p>{{pin.description}}</p>
-      <address>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</address>
-      <address>{{pin.address}}</address>
+      <p>{{ pin.description }}</p>
+      <address>Latitude: {{ pin.lat }}<span style="margin-right: 32px;"></span>Longitude: {{ pin.long }}</address>
+      <address>Zip Code: <span id="zip-code"></span></address>
+      <address>{{ pin.address }}</address>
     </div>
   </div>
 
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([{{ pin.lat }}, {{ pin.long }}], 16);
 
-    <script>
-      // Initialize the map
-      var map = L.map('map').setView([{{ pin.lat }}, {{ pin.long }}], 16);
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
+    // Variable to store the last added marker
+    var marker = L.marker([{{ pin.lat }}, {{ pin.long }}]).addTo(map);
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+    // Disable default Leaflet behavior for double-click
+    map.doubleClickZoom.disable();
 
-      // Variable to store the last added marker
-      var marker = L.marker([{{pin.lat}}, {{pin.long}}]).addTo(map);
-  
+    // Function to fetch zip code based on latitude and longitude
+    function fetchZipCode(lat, lng) {
+        var xhr = new XMLHttpRequest();
+        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+        xhr.open('GET', url, true);
+        xhr.onload = function () {
+            var data = JSON.parse(this.responseText);
+            if (data.address && data.address.postcode) {
+                var zipCode = data.address.postcode;
+                document.getElementById('zip-code').textContent = zipCode;
+                // Here you can store the zip code for each pin as needed
+                // Example: You can send an AJAX request to your Django backend to save the zip code
+            }
+        };
+        xhr.send();
+    }
 
-      
-
-      // Disable default Leaflet behavior for double-click
-      map.doubleClickZoom.disable();
+    // Fetch zip code for the current pin
+    fetchZipCode({{ pin.lat }}, {{ pin.long }});
   </script>
-  </body>
+</body>
 
 </html>

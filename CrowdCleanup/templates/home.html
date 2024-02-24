@@ -52,8 +52,43 @@
     <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
     <h1>What Are You Looking To Do Today?</h1>
     <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
-    <a href="{% url 'clean_litter' %}" class="button">I Want to Clean Up Litter</a>
+    <a href="{% url 'clean_litter' %}?zip={{ zipCode }}" class="button">I Want to Clean Up Litter</a>
   </div>
+
+  <script>
+    // Function to store zip code in localStorage
+    function storeZipCode(zipCode) {
+      localStorage.setItem('zipCode', zipCode);
+    }
+
+    // Function to handle successful retrieval of geolocation
+    function handleGeolocationSuccess(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      
+      // Call a service to get the zip code based on latitude and longitude
+      fetchZipCode(latitude, longitude);
+    }
+
+    // Function to fetch zip code based on latitude and longitude
+    function fetchZipCode(lat, lng) {
+      var xhr = new XMLHttpRequest();
+      var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+      xhr.open('GET', url, true);
+      xhr.onload = function () {
+        var data = JSON.parse(this.responseText);
+        if (data.address && data.address.postcode) {
+          var zipCode = data.address.postcode;
+          // Store the retrieved zip code in localStorage
+          storeZipCode(zipCode);
+        }
+      };
+      xhr.send();
+    }
+
+    // Attempt to get the user's current location
+    navigator.geolocation.getCurrentPosition(handleGeolocationSuccess);
+  </script>
 </body>
 
 </html>
