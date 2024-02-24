@@ -12,4 +12,5 @@ urlpatterns = [
     path('clean_litter/', views.clean_litter, name='clean_litter'),
     path('pin_view/<int:pin_id>/', views.pin_view, name = 'pin_view'),
     path("admin/", admin.site.urls),
+    path('after_submit/', views.after_submit, name='after_submit'),
 ]

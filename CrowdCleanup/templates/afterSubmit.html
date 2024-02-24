@@ -1,0 +1,60 @@
+<!-- afterSubmit.html -->
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanks for Making the World a Little Cleaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 0 10px;
+            border: 2px solid #000;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
+        <h1>Thanks for Making the World a Little Cleaner</h1>
+        <a href="{% url 'report_litter' %}" class="button">Submit Another Form</a>
+        <a href="{% url 'home' %}" class="button">Return Home</a>
+        <a href="{% url 'clean_litter' %}" class="button">Clean Up Litter</a>
+    </div>
+</body>
+
+</html>
