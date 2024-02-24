@@ -78,6 +78,7 @@
       <br>
       <p>{{pin.description}}</p>
       <address>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</address>
+      <address>Zip Code: <span id="zipCode"></span></address> <!-- Display Zip Code here -->
       <address>{{pin.address}}</address>
     </div>
   </div>
@@ -96,8 +97,23 @@
       // Variable to store the last added marker
       var marker = L.marker([{{pin.lat}}, {{pin.long}}]).addTo(map);
   
+      // Fetch zip code and display
+      fetchZipCode({{ pin.lat }}, {{ pin.long }});
 
-      
+      // Function to fetch zip code from latitude and longitude
+      function fetchZipCode(lat, lng) {
+          var xhr = new XMLHttpRequest();
+          var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+          xhr.open('GET', url, true);
+          xhr.onload = function () {
+              var data = JSON.parse(this.responseText);
+              if (data.address && data.address.postcode) {
+                  var zipCode = data.address.postcode;
+                  document.getElementById('zipCode').textContent = zipCode;
+              }
+          };
+          xhr.send();
+      }
 
       // Disable default Leaflet behavior for double-click
       map.doubleClickZoom.disable();
