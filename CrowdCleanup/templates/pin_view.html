@@ -1,123 +1,90 @@
-{% load static %}
 <!DOCTYPE html>
-<style>
-  body {
-    margin: auto;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    flex-direction: column;
-    width: 75%;
-    background-color: ivory;
-  }
-
-  header {
-    text-align: center;
-    padding: 10px;
-  }
-
-  p {
-    font-size: larger;
-  }
-
-  img {
-    max-width: 100%;
-    max-height: 50%;
-  }
-
-  .container {
-    display: flex;
-    flex: 1;
-  }
-
-  .half {
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .tags {
-    font-size: medium;
-  }
-</style>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Map with Double Click Marker Drop (No Zoom)</title>
-  <!-- Include Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <!-- Include Leaflet JavaScript -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <style>
-      #map {
-          height:50%;
-          width:100%;
-      }
-  </style>
-  
-  <title>Litter @ {{pin.zip}}</title>
+  <title>Litter @ {{pin.zipcode}}</title>
 
+  <!-- Include Leaflet CSS and JavaScript -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      /* Set body height to 100% of the viewport */
+    }
+
+    .split-container {
+      flex: 1;
+      display: flex;
+      width: 100%;
+    }
+
+    .left-side {
+      flex: 1;
+      box-sizing: border-box;
+      flex-grow: 1;
+      margin-right: 8px;
+    }
+
+    .right-side {
+      flex: 1;
+      box-sizing: border-box;
+      flex-grow: 1;
+      margin-left: 8px;
+      margin-right: 8px;
+      /* Allow the panes to grow and fill the remaining space */
+    }
+
+    #map {
+      height: 100%;
+    }
+  </style>
 </head>
 
 <body>
-  <header>
-    <h1>Litter @ {{pin.zip}}</h1>
-  </header>
-  <div class="container">
-    <div class="half" id="left-half">
+  <div class="split-container">
+    <div class="left-side">
+      <!-- Leaflet Map Container -->
       <div id="map"></div>
-      {%if pin.image%}
-      <img src="{{pin.image.url}}" alt="PLACEHOLDER">
-      {%endif%}
     </div>
-    <div class="half" id="right-half">
-      <p class="tags"><span style="float: left;">{{pin.status}}</span>
+    <div class="right-side">
+      <!-- Content for the right side -->
+      <h1>Litter @ {{pin.zipcode}}</h1>
+      <p fontsize="medium"><span style="float: left;">{{pin.status}}</span>
         <span style="float: right;">{{pin.date|date:"Y-m-d"}}</span>
       </p>
       <br>
       <p>{{pin.description}}</p>
+      <img src="{{pin.image}}" alt="">
       <address>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</address>
-      <address>Zip Code: <span id="zipCode"></span></address> <!-- Display Zip Code here -->
-      <address>{{pin.address}}</address>
     </div>
   </div>
 
+  <script>
+    // Example: Django template logic to get latitude and longitude from the server
+    const latitude = {{ pin.lat }};
+    const longitude = {{ pin.long }};
 
-    <script>
-      // Initialize the map
-      var map = L.map('map').setView([{{ pin.lat }}, {{ pin.long }}], 16);
+    // Initialize Leaflet map
+    const map = L.map('map').setView([latitude, longitude], 16);
 
+    // Add a pin (marker) to the map
+    L.marker([latitude, longitude]).addTo(map)
+      .bindPopup('Your Pin Content Here');
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      // Variable to store the last added marker
-      var marker = L.marker([{{pin.lat}}, {{pin.long}}]).addTo(map);
-  
-      // Fetch zip code and display
-      fetchZipCode({{ pin.lat }}, {{ pin.long }});
-
-      // Function to fetch zip code from latitude and longitude
-      function fetchZipCode(lat, lng) {
-          var xhr = new XMLHttpRequest();
-          var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
-          xhr.open('GET', url, true);
-          xhr.onload = function () {
-              var data = JSON.parse(this.responseText);
-              if (data.address && data.address.postcode) {
-                  var zipCode = data.address.postcode;
-                  document.getElementById('zipCode').textContent = zipCode;
-              }
-          };
-          xhr.send();
-      }
-
-      // Disable default Leaflet behavior for double-click
-      map.doubleClickZoom.disable();
+    // Add a tile layer (you can replace this with your desired tile layer)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
   </script>
-  </body>
+
+</body>
 
 </html>
