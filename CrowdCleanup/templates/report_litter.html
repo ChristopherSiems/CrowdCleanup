@@ -1,5 +1,8 @@
+<!-- report_litter.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,18 +49,22 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         #map {
             height: 100%; /* Adjust height as needed */
             width: 100%;
         }
-        
+
+        #preview-container {
+            display: none; /* Hide the preview container initially */
+            margin-top: 10px;
+        }
+
         #preview {
             max-width: 100%;
             height: auto;
-            margin-top: 10px;
         }
-        
+
         .input-container {
             margin-top: 20px;
             width: 100%;
@@ -65,16 +72,16 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .input-container input[type="text"] {
             width: 80%;
             margin-bottom: 10px;
         }
-        
+
         .input-container input[type="file"] {
             width: 80%;
         }
-        
+
         .input-container button {
             margin-top: 10px;
             padding: 10px 20px;
@@ -83,12 +90,13 @@
             background-color: #f0f0f0;
             cursor: pointer;
         }
-        
+
         .input-container button:hover {
             background-color: #e0e0e0;
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Report Litter</h1>
@@ -106,18 +114,20 @@
                 {% csrf_token %}
                 <input type="text" id="descInput" name="description" placeholder="Enter description">
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                <img id="preview" src="#" alt="Preview">
+                <div id="preview-container">
+                    <img id="preview" src="#" alt="Preview">
+                </div>
                 <button type="submit">Submit</button>
             </form>
         </div>
     </div>
-    
+
     <script>
         // Initialize the map
         var map = L.map('map');
 
         // Variable to store the last added marker
-        var lastMarker = null; 
+        var lastMarker = null;
         var lat = null;
         var long = null;
 
@@ -125,7 +135,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         // Function to handle mouse down event
         function onMouseDown(e) {
             if (e.originalEvent.detail === 2) { // Check if it's a double-click
@@ -135,7 +145,7 @@
                     lat = null;
                     long = null;
                 }
-                
+
                 // Add a new marker
                 lastMarker = L.marker(e.latlng).addTo(map);
                 lat = e.lat;
@@ -163,20 +173,23 @@
 
         // Disable default Leaflet behavior for double-click
         map.doubleClickZoom.disable();
-        
+
         // Function to preview the selected image
         function previewImage(event) {
             var input = event.target;
             var preview = document.getElementById('preview');
-            
+            var previewContainer = document.getElementById('preview-container');
+
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
+                    previewContainer.style.display = 'block'; // Show the preview container
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
     </script>
 </body>
+
 </html>
