@@ -11,5 +11,5 @@ class Pin(models.Model):
   date = models.DateTimeField(auto_now_add=True)
   description = models.TextField()
   image = models.ImageField(upload_to='media/', null=True, blank=True)
-  status = models.CharField(choices=STATUS_OPTIONS, default="to_be_cleaned")
+  status = models.CharField(choices=STATUS_OPTIONS, default="to_be_cleaned", max_length = 13)
   description = models.TextField()
