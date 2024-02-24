@@ -39,7 +39,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaflet Map with Double Click Marker Drop (No Zoom)</title>
+  <!-- Include Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Include Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+      #map {
+          height:50%;
+          width:100%;
+      }
+  </style>
+  
   <title>Litter @ {{pin.zip}}</title>
+
 </head>
 
 <body>
@@ -48,7 +61,7 @@
   </header>
   <div class="container">
     <div class="half" id="left-half">
-      <p>PLACEHOLDER</p>
+      <div id="map"></div>
       {%if pin.image%}
       <img src="{{pin.image.url}}" alt="PLACEHOLDER">
       {%endif%}
@@ -63,6 +76,27 @@
       <address>{{pin.address}}</address>
     </div>
   </div>
-</body>
+
+
+    <script>
+      // Initialize the map
+      var map = L.map('map').setView([{{ pin.lat }}, {{ pin.long }}], 16);
+
+
+      // Add OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Variable to store the last added marker
+      var marker = L.marker([{{pin.lat}}, {{pin.long}}]).addTo(map);
+  
+
+      
+
+      // Disable default Leaflet behavior for double-click
+      map.doubleClickZoom.disable();
+  </script>
+  </body>
 
 </html>
