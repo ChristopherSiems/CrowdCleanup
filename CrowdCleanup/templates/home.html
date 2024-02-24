@@ -1,5 +1,6 @@
 <!-- home.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -17,8 +18,15 @@
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 28px; /* Adjust the font size as needed */
       margin-bottom: 20px;
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 100px; /* Adjust the width as needed */
     }
 
     .button {
@@ -41,7 +49,10 @@
 
 <body>
   <div class="container">
+    <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
     <h1>What Are You Looking To Do Today?</h1>
+    <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
+    <a href="{% url 'clean_litter' %}" class="button">I Want to Clean Up Litter</a>
   </div>
 </body>
 
