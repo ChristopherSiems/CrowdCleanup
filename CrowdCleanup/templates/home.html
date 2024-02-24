@@ -1,4 +1,3 @@
-<!-- home.html -->
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -52,8 +51,40 @@
     <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
     <h1>What Are You Looking To Do Today?</h1>
     <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
-    <a href="{% url 'clean_litter' %}" class="button">I Want to Clean Up Litter</a>
+    <a href="{% url 'clean_litter' %}" class="button" onclick="getZipCode()">I Want to Clean Up Litter</a>
   </div>
+
+  <script>
+    function getZipCode() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                fetchZipCode(latitude, longitude);
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function fetchZipCode(latitude, longitude) {
+        var xhr = new XMLHttpRequest();
+        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
+        xhr.open('GET', url, true);
+        xhr.onload = function() {
+            var data = JSON.parse(this.responseText);
+            if (data.address && data.address.postcode) {
+                var zipCode = data.address.postcode;
+                // Redirect to the clean_litter page with the zip code in the URL
+                window.location.href = `/clean_litter?zip=${zipCode}`;
+            } else {
+                alert("Zip code not found.");
+            }
+        };
+        xhr.send();
+    }
+</script>
+
 </body>
 
 </html>

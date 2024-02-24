@@ -13,12 +13,17 @@ def report_litter(request):
   return render(request, 'report_litter.html')
 
 def clean_litter(request):
-    # Logic for cleaning up litter
-    return render(request, 'clean_litter.html')  # Assuming you have a template named clean_litter.html
+    zip_code = request.GET.get('zip')
+    if zip_code:
+        pins_with_zip = Pin.objects.filter(zipcode=zip_code)
+        return render(request, 'clean_litter.html', {'zipcode': zip_code, 'pins_with_zip': pins_with_zip})
+    else:
+        return render(request, 'clean_litter.html')
     
 def pin_view(request, pin_id):
-  pin = Pin.objects.get(id = pin_id)
-  return render(request, 'pin_view.html', {'pin' : pin})
+    pin = Pin.objects.get(id=pin_id)
+    print(pin.image.url)
+    return render(request, 'pin_view.html', {'pin': pin})
 
 def after_submit(request):
     return render(request, 'afterSubmit.html')

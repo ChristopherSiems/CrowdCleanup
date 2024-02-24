@@ -1,11 +1,77 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello, World!</title>
+    <title>Clean Litter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            border: 2px solid #000;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 300px;
+            height: auto;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Hello, World!</h1>
+    <div class="container">
+        <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo">
+        <h1>Current ZIP Code: {{ zipcode }}</h1>
+            {% for pin in pins_with_zip %}
+            <li>
+                <p>Description: {{ pin.description }}</p>
+                <p>Latitude: {{ pin.lat }}</p>
+                <p>Longitude: {{ pin.long }}</p>
+            </li>
+            {% empty %}
+            <li>No pins found with this zip code.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'home' %}" class="button">Back to Home</a>
+    </div>
 </body>
+
 </html>
