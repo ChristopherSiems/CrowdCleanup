@@ -7,8 +7,17 @@ def home(request):
 
 def report_litter(request):
     if request.method == 'POST':
-        # Assuming you handle form submission here
-        # Redirect to afterSubmit page after form submission
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        zip_code = request.POST.get('zip_code')
+
+        # Print the submitted information in the command prompt
+        print("Description:", description)
+        print("Latitude:", latitude)
+        print("Longitude:", longitude)
+        print("Zip Code:", zip_code)
         return redirect('after_submit')  # Redirects to the URL with name 'after_submit'
     return render(request, 'report_litter.html')
 

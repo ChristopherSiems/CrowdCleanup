@@ -121,6 +121,10 @@
                 <div id="preview-container">
                     <img id="preview" src="#" alt="Preview">
                 </div>
+                <!-- Add hidden input fields for latitude, longitude, and zip code -->
+                <input type="hidden" id="latitudeInput" name="latitude">
+                <input type="hidden" id="longitudeInput" name="longitude">
+                <input type="hidden" id="zipCodeInput" name="zip_code">
                 <button type="submit" id="submitButton">Submit</button>
                 <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
             </form>
@@ -157,6 +161,10 @@
                 // Fetch zip code and display
                 fetchZipCode(lat, lng);
 
+                // Set latitude and longitude in hidden input fields
+                document.getElementById('latitudeInput').value = lat;
+                document.getElementById('longitudeInput').value = lng;
+
                 // Hide pin error message
                 document.getElementById('pinErrorMessage').style.display = 'none';
             }
@@ -172,6 +180,8 @@
                 if (data.address && data.address.postcode) {
                     var zipCode = data.address.postcode;
                     lastMarker.bindTooltip(zipCode).openTooltip();
+                    // Set zip code in hidden input field
+                    document.getElementById('zipCodeInput').value = zipCode;
                 }
             };
             xhr.send();
