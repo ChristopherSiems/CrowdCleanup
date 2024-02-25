@@ -3,88 +3,83 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
 
-    .container {
-      margin-top: 100px;
-    }
+        .container {
+            margin-top: 100px;
+        }
 
-    h1 {
-      font-size: 28px; /* Adjust the font size as needed */
-      margin-bottom: 20px;
-    }
+        h1 {
+            font-size: 28px; /* Adjust the font size as needed */
+            margin-bottom: 20px;
+        }
 
-    .logo {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 100px; /* Adjust the width as needed */
-    }
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px; /* Adjust the width as needed */
+        }
 
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      font-size: 18px;
-      margin: 0 10px;
-      border: 2px solid #000;
-      background-color: #f0f0f0;
-      text-decoration: none;
-      color: #000;
-      cursor: pointer;
-    }
+        .button {
+            display: none; /* Hide buttons initially */
+        }
 
-    .button:hover {
-      background-color: #e0e0e0;
-    }
-  </style>
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            display: none;
+        }
+
+        #title {
+            display: block; /* Show the title initially */
+        }
+
+        #zipCodeForm {
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container">
-    <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
-    <h1>What Are You Looking To Do Today?</h1>
-    <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
-    <a href="{% url 'clean_litter' %}" class="button" onclick="getZipCode()">I Want to Clean Up Litter</a>
-  </div>
+    <div class="container">
+        <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
+        <h1 id="title">Please Enter Your ZIP Code</h1> <!-- Initially displays this title -->
+        <form action="{%url 'clean_litter'%}" method="post">
+            {% csrf_token %}
+            <input type="text" name="zip_code" placeholder="Enter Zip Code" maxlength="5">
+            <button type="submit">Submit</button>
+            <p class="error-message" id="zipCodeErrorMessage">Please enter a valid ZIP Code</p>
+        </form>
+    </div>
 
-  <script>
-    function getZipCode() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                fetchZipCode(latitude, longitude);
-            });
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
-    }
+    <script>
+        document.getElementById('zipCodeForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-    function fetchZipCode(latitude, longitude) {
-        var xhr = new XMLHttpRequest();
-        var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
-        xhr.open('GET', url, true);
-        xhr.onload = function() {
-            var data = JSON.parse(this.responseText);
-            if (data.address && data.address.postcode) {
-                var zipCode = data.address.postcode;
-                // Redirect to the clean_litter page with the zip code in the URL
-                window.location.href = `/clean_litter?zip=${zipCode}`;
+            // Get the entered zip code
+            var zipCode = document.getElementById('zipCodeInput').value;
+
+            // Check if the zip code is a 5-digit number
+            if (/^\d{5}$/.test(zipCode)) {
+                // Save the zip code in local storage
+                localStorage.setItem('zipCode', zipCode);
+
+                // Redirect to the clean_litter.html page
+                window.location.href = "{% url 'clean_litter' %}";
             } else {
-                alert("Zip code not found.");
+                // Show error message for invalid zip code
+                document.getElementById('zipCodeErrorMessage').style.display = 'block';
             }
-        };
-        xhr.send();
-    }
-</script>
-
+        });
+    </script>
 </body>
 
 </html>
