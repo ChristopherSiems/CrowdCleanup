@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Crowd Cleanup</title>
     <style>
         body {
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -14,10 +14,11 @@
 
         .container {
             margin-top: 100px;
+            position: relative; /* Position container relative for absolute positioning of elements */
         }
 
         h1 {
-            font-size: 28px; /* Adjust the font size as needed */
+            font-size: 28px;
             margin-bottom: 20px;
         }
 
@@ -25,11 +26,24 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 100px; /* Adjust the width as needed */
+            width: 100px;
         }
 
+        /* Styling for the buttons */
         .button {
-            display: none; /* Hide buttons initially */
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 0 10px;
+            border: 2px solid #000;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #e0e0e0;
         }
 
         .error-message {
@@ -39,46 +53,67 @@
         }
 
         #title {
-            display: block; /* Show the title initially */
+            display: block;
         }
 
-        #zipCodeForm {
-            display: inline-block;
+        #button-container {
+            margin-top: 20px; /* Add space between title and buttons */
+            text-align: center; /* Center align the buttons */
+        }
+
+        #search-form {
+            margin-bottom: 20px; /* Add margin at the bottom */
+            display: inline-block; /* Keep form elements inline */
+            vertical-align: top; /* Align form elements to the top */
+        }
+
+        .zip-code-input {
+            width: 150px; /* Adjust width of the input field */
+            padding: 12px; /* Increase padding for better visibility */
+            margin-right: 10px; /* Add margin between input and button */
+        }
+
+        /* Separate line between the buttons */
+        hr {
+            width: 50%; /* Set the width */
+            margin: 20px auto; /* Center horizontally */
+            border: none;
+            border-top: 2px solid #000;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <img src="{% static 'crowdCleanup.jpg' %}" alt="Crowd Cleanup Logo" class="logo" style="width: 300px; height: auto;">
-        <h1 id="title">Please Enter Your ZIP Code</h1> <!-- Initially displays this title -->
-        <form action="{%url 'clean_litter'%}" method="post">
+        <h1 id="title">Crowd Cleanup</h1>
+        <div id="button-container">
+            <!-- First button -->
+            <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
+        </div>
+    </div>
+    <hr> <!-- Separate line -->
+    <div id="button-container">
+        <!-- Second button -->
+        <form id="search-form" action="{% url 'clean_litter' %}" method="post" onsubmit="return validateZipCode()">
             {% csrf_token %}
-            <input type="text" name="zip_code" placeholder="Enter Zip Code" maxlength="5">
-            <button type="submit">Submit</button>
+            <input type="text" name="zip_code" id="zipCodeInput" placeholder="Enter ZIP to Search Litter" maxlength="5" class="zip-code-input">
+            <button type="submit" class="button">Search</button>
             <p class="error-message" id="zipCodeErrorMessage">Please enter a valid ZIP Code</p>
         </form>
     </div>
 
     <script>
-        document.getElementById('zipCodeForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-
-            // Get the entered zip code
+        function validateZipCode() {
             var zipCode = document.getElementById('zipCodeInput').value;
-
-            // Check if the zip code is a 5-digit number
-            if (/^\d{5}$/.test(zipCode)) {
-                // Save the zip code in local storage
-                localStorage.setItem('zipCode', zipCode);
-
-                // Redirect to the clean_litter.html page
-                window.location.href = "{% url 'clean_litter' %}";
-            } else {
-                // Show error message for invalid zip code
-                document.getElementById('zipCodeErrorMessage').style.display = 'block';
+            var errorMessage = document.getElementById('zipCodeErrorMessage');
+            
+            if (!(/^\d{5}$/.test(zipCode))) {
+                errorMessage.style.display = 'block'; // Show error message if zip code is invalid
+                return false; // Prevent form submission
             }
-        });
+            errorMessage.style.display = 'none'; // Hide error message if zip code is valid
+            return true; // Allow form submission
+        }
     </script>
 </body>
 
