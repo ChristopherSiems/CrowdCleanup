@@ -19,6 +19,7 @@
       flex-direction: column;
       min-height: 100vh;
       overflow: hidden;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 
     .split-container {
@@ -58,6 +59,9 @@
       margin-right: 8px;
       flex-direction: column;
       padding-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .bottom-button {
@@ -89,6 +93,7 @@
      nav {
             background-color: mediumseagreen;
             padding: 10px 0;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         }
 
         /* Style the navigation links */
@@ -113,6 +118,10 @@
         nav ul li a:hover {
             background-color: seagreen;
         }
+      
+        .date {
+          padding-left: 70px; /* Adds space to the right of element1 */
+        }
     
   </style>
 </head>
@@ -134,7 +143,7 @@
       <!-- Content for the right side -->
       <h1>Litter @ {{pin.zipcode}}</h1>
       <p fontsize="medium"><span style="float: left;">{{pin.status}}</span>
-        <span style="float: right;">{{pin.date|date:"Y-m-d"}}</span>
+        <span class= "date" style="float: right;">{{pin.date|date:"Y-m-d"}}</span>
       </p>
       <br>
       <p class="main">{{pin.description}}</p>
