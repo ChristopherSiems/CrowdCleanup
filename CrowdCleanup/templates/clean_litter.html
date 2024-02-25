@@ -12,6 +12,8 @@
     body {
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       text-align: center;
+      background-color: ivory;
+      overflow: hidden;
     }
 
     .container {
@@ -57,11 +59,15 @@
     }
 
     #map {
-      height: 75vh;
-      width: auto;
-      margin: 0 auto;
-      margin-bottom: 20px;
+        height: 77vh;
+        width: 100vw; /* Adjust width to fit browser window */
+        margin: 0;
+        margin-bottom: 20px;
+        position: absolute; /* Position the map absolutely */
+        left: 0;
     }
+    
+    
   </style>
 </head>
 
