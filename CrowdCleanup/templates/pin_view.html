@@ -64,7 +64,7 @@
       bottom: 16px;
       border: 0;
       color: ivory;
-      background-color: seagreen;
+      background-color: mediumseagreen;
       font-size: larger;
       padding: auto;
       border-radius: 16px;
@@ -84,10 +84,47 @@
     #map {
       height: 100%;
     }
+
+     /* Style the navbar */
+     nav {
+            background-color: mediumseagreen;
+            padding: 10px 0;
+        }
+
+        /* Style the navigation links */
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline; /* Display list items horizontally */
+        }
+
+        nav ul li a {
+            color: ivory;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: seagreen;
+        }
+    
   </style>
 </head>
 
 <body>
+  <nav>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
+        <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
+    </ul>
+  </nav>
   <div class="split-container">
     <div class="left-side">
       <!-- Leaflet Map Container -->
