@@ -19,7 +19,7 @@ def report_litter(request):
 @csrf_protect
 def clean_litter(request):
     zip_code = request.POST.get('zip_code')
-    pins_with_zip = Pin.objects.filter(zipcode=zip_code)  # Assuming Pin is your model representing litter pins
+    pins_with_zip = Pin.objects.filter(zipcode=zip_code, status='TO BE CLEANED')  # Assuming Pin is your model representing litter pins
     json_pins = serializers.serialize('json', pins_with_zip)
     return render(request, 'clean_litter.html', {'pins_with_zip': pins_with_zip, 'zip_code' : zip_code, 'json_pins': json_pins})
 
@@ -29,7 +29,6 @@ def pin_view(request, pin_id):
     if request.method == 'POST':
         pin.status = 'CLEANED'
         pin.save()
-        print('heloo')
         return render(request, 'afterSubmit.html')
     return render(request, 'pin_view.html', {'pin': pin})
 
