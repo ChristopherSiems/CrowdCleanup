@@ -173,26 +173,6 @@
       </form>
     </div>
   </div>
-  <div class="half" id="right-half">
-    <!-- Content for the right half goes here -->
-    <h2>Double click on the map to drop a pin!</h2>
-    <h2>Write a short description of the litter.</h2>
-    <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data"
-      onsubmit="return checkPin()">
-      {% csrf_token %}
-      <input type="text" id="descInput" name="description" placeholder="Enter description">
-      <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-      <div id="preview-container">
-        <img id="preview" src="#" alt="Preview">
-      </div>
-      <!-- Add hidden input fields for latitude, longitude, and zip code -->
-      <input type="hidden" id="latitudeInput" name="latitude">
-      <input type="hidden" id="longitudeInput" name="longitude">
-      <input type="hidden" id="zipCodeInput" name="zip_code">
-      <button type="submit" id="submitButton">Submit</button>
-      <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
-    </form>
-  </div>
   </div>
 
   <script>
