@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clean Litter</title>
   <!-- Add Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -86,14 +86,16 @@
   <div id="map"></div>
 
   <!-- Add Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Your Leaflet map script here -->
   <script>
     // Initialize the map
+
     var userLatitude = localStorage.getItem('user_latitude');
     var userLongitude = localStorage.getItem('user_longitude');
-    var map = L.map('map').setView([userLatitude, userLongitude], 16); // Initialize with default center (New York)
+
+    var map = L.map('map').setView([0, 0], 16); // Initialize with default center (New York)
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
