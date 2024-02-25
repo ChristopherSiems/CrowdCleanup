@@ -4,91 +4,91 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanks for Making the World a Little Cleaner</title>
-    <style>
-        body {
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            text-align: center;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanks for Making the World a Little Cleaner</title>
+  <style>
+    body {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      text-align: center;
+    }
 
-        .container {
-            margin-top: 100px;
-        }
+    .container {
+      margin-top: 100px;
+    }
 
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-        .logo {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 100px;
-        }
+    .logo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 100px;
+    }
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 0 10px;
-            border: 2px solid #000;
-            background-color: #f0f0f0;
-            text-decoration: none;
-            color: #000;
-            cursor: pointer;
-        }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 0 10px;
+      border: 2px solid #000;
+      background-color: #f0f0f0;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
 
-        .button:hover {
-            background-color: #e0e0e0;
-        }
-        /* Style the navbar */
-     nav {
-            background-color: mediumseagreen;
-            padding: 10px 0;
-        }
+    .button:hover {
+      background-color: #e0e0e0;
+    }
 
-        /* Style the navigation links */
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+    /* Style the navbar */
+    nav {
+      background-color: mediumseagreen;
+      padding: 10px 0;
+    }
 
-        nav ul li {
-            display: inline; /* Display list items horizontally */
-        }
+    /* Style the navigation links */
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
 
-        nav ul li a {
-            color: ivory;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
+    nav ul li {
+      display: inline;
+      /* Display list items horizontally */
+    }
 
-        nav ul li a:hover {
-            background-color: seagreen;
-        }
-    </style>
+    nav ul li a {
+      color: ivory;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    nav ul li a:hover {
+      background-color: seagreen;
+    }
+  </style>
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
-            <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
-        </ul>
-    </nav>
-    <div class="container">
-        <h1>Thanks for Making the World a Little Cleaner</h1>
-        <a href="{% url 'report_litter' %}" class="button">Submit Another Form</a>
-        <a href="{% url 'home' %}" class="button">Return Home</a>
-        <a href="{% url 'clean_litter' %}" class="button">Clean Up Litter</a>
-    </div>
+  <nav>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h1>Thanks for Making the World a Little Cleaner</h1>
+    <a href="{% url 'report_litter' %}" class="button">Submit Another Form</a>
+    <a href="{% url 'home' %}" class="button">Return Home</a>
+  </div>
 </body>
 
 </html>
