@@ -3,118 +3,152 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crowd Cleanup</title>
-    <style>
-        body {
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            text-align: center;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crowd Cleanup</title>
+  <style>
+    html,
+    body {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      text-align: center;
+      background-image: url('{% static "home.png" %}');
+      margin: auto;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      height: 100%;
+    }
 
-        .container {
-            margin-top: 100px;
-            position: relative; /* Position container relative for absolute positioning of elements */
-        }
+    .grandparent {
+      backdrop-filter: drop(4px);
+    }
 
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+    .parentcontainer {
+      width: 50%;
+      height: 40vh;
+      margin: auto;
+      margin-top: 100px;
+      background-color: ivory;
+      border: solid;
+      border-radius: 16px;
+    }
 
-        .logo {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 100px;
-        }
+    .container {
+      position: relative;
+      /* Position container relative for absolute positioning of elements */
+    }
 
-        /* Styling for the buttons */
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 0 10px;
-            border: 2px solid #000;
-            background-color: #f0f0f0;
-            text-decoration: none;
-            color: #000;
-            cursor: pointer;
-        }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-        .button:hover {
-            background-color: #e0e0e0;
-        }
+    /* Styling for the buttons */
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 0 10px;
+      border: 2px solid #000;
+      background-color: #f0f0f0;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
 
-        .error-message {
-            color: red;
-            margin-top: 5px;
-            display: none;
-        }
+    .button:hover {
+      background-color: #e0e0e0;
+    }
 
-        #title {
-            display: block;
-        }
+    .error-message {
+      color: red;
+      margin-top: 5px;
+      display: none;
+    }
 
-        #button-container {
-            margin-top: 20px; /* Add space between title and buttons */
-            text-align: center; /* Center align the buttons */
-        }
+    #title {
+      display: block;
+    }
 
-        #search-form {
-            margin-bottom: 20px; /* Add margin at the bottom */
-            display: inline-block; /* Keep form elements inline */
-            vertical-align: top; /* Align form elements to the top */
-        }
+    #button-container {
+      margin-top: 20px;
+      /* Add space between title and buttons */
+      text-align: center;
+      /* Center align the buttons */
+    }
 
-        .zip-code-input {
-            width: 150px; /* Adjust width of the input field */
-            padding: 12px; /* Increase padding for better visibility */
-            margin-right: 10px; /* Add margin between input and button */
-        }
+    #search-form {
+      margin-bottom: 20px;
+      /* Add margin at the bottom */
+      display: inline-block;
+      /* Keep form elements inline */
+      vertical-align: top;
+      /* Align form elements to the top */
+    }
 
-        /* Separate line between the buttons */
-        hr {
-            width: 50%; /* Set the width */
-            margin: 20px auto; /* Center horizontally */
-            border: none;
-            border-top: 2px solid #000;
-        }
-    </style>
+    .zip-code-input {
+      width: 150px;
+      /* Adjust width of the input field */
+      padding: 12px;
+      /* Increase padding for better visibility */
+      margin-right: 10px;
+      /* Add margin between input and button */
+    }
+
+    /* Separate line between the buttons */
+    hr {
+      width: 50%;
+      /* Set the width */
+      margin: 20px auto;
+      /* Center horizontally */
+      border: none;
+      border-top: 2px solid #000;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="parentcontainer">
     <div class="container">
-        <h1 id="title">Crowd Cleanup</h1>
-        <div id="button-container">
-            <!-- First button -->
-            <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
-        </div>
+      <h1 id="title">Crowd Cleanup</h1>
+      <div id="button-container">
+        <!-- First button -->
+        <a href="{% url 'report_litter' %}" class="button">I Want to Report Litter</a>
+      </div>
     </div>
     <hr> <!-- Separate line -->
     <div id="button-container">
-        <!-- Second button -->
-        <form id="search-form" action="{% url 'clean_litter' %}" method="post" onsubmit="return validateZipCode()">
-            {% csrf_token %}
-            <input type="text" name="zip_code" id="zipCodeInput" placeholder="Enter ZIP to Search Litter" maxlength="5" class="zip-code-input">
-            <button type="submit" class="button">Search</button>
-            <p class="error-message" id="zipCodeErrorMessage">Please enter a valid ZIP Code</p>
-        </form>
+      <!-- Second button -->
+      <form id="search-form" action="{% url 'clean_litter' %}" method="post" onsubmit="return validateZipCode()">
+        {% csrf_token %}
+        <input type="text" name="zip_code" id="zipCodeInput" placeholder="Enter ZIP to Search Litter" maxlength="5"
+          class="zip-code-input">
+        <button type="submit" class="button">Search</button>
+        <p class="error-message" id="zipCodeErrorMessage">Please enter a valid ZIP Code</p>
+      </form>
     </div>
+    <div>
+      <h2>Mission Statement</h2>
+      <p>Crowd Cleanup is a web platform for neighbors to track and manage litter in their communities. Our goal is to
+        make it easy and seamless for communities coordinate spontaneous cleanup efforts for their shared public spaces.
+      </p>
+    </div>
+  </div>
 
-    <script>
-        function validateZipCode() {
-            var zipCode = document.getElementById('zipCodeInput').value;
-            var errorMessage = document.getElementById('zipCodeErrorMessage');
-            
-            if (!(/^\d{5}$/.test(zipCode))) {
-                errorMessage.style.display = 'block'; // Show error message if zip code is invalid
-                return false; // Prevent form submission
-            }
-            errorMessage.style.display = 'none'; // Hide error message if zip code is valid
-            return true; // Allow form submission
-        }
-    </script>
+
+  <script>
+    function validateZipCode() {
+      var zipCode = document.getElementById('zipCodeInput').value;
+      var errorMessage = document.getElementById('zipCodeErrorMessage');
+
+      if (!(/^\d{5}$/.test(zipCode))) {
+        errorMessage.style.display = 'block'; // Show error message if zip code is invalid
+        return false; // Prevent form submission
+      }
+      errorMessage.style.display = 'none'; // Hide error message if zip code is valid
+      return true; // Allow form submission
+    }
+  </script>
 </body>
 
 </html>
