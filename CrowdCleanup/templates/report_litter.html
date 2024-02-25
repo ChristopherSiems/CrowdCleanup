@@ -16,6 +16,8 @@
             display: flex;
             height: 100vh;
             flex-direction: column;
+            font-family: Candara, sans-serif;
+            background-color: ivory;
         }
 
         header {
@@ -40,12 +42,35 @@
         }
 
         #right-half {
-            background-color: #f0f0f0;
+            background-color: ivory;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        #right-half-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #right-half-header {
+            background-color: ivory;
+            color: black;
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            align-self: flex-start;
+        }
+
+        #right-half-content {
+            padding: 20px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            box-sizing: border-box;
         }
 
         #map {
@@ -101,7 +126,7 @@
         /* Style the navbar */
      nav {
             background-color: mediumseagreen;
-            padding: 10px 0;
+            padding: 20px 0;
         }
 
         /* Style the navigation links */
@@ -137,32 +162,36 @@
             <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
         </ul>
     </nav>
-    <header>
-        <h1>Report Litter</h1>
-    </header>
     <div class="container">
         <div class="half" id="left-half">
             <!-- Content for the left half goes here -->
             <div id="map"></div>
         </div>
         <div class="half" id="right-half">
-            <!-- Content for the right half goes here -->
-            <h2>Double click on the map to drop a pin!</h2>
-            <h2>Write a short description of the litter.</h2>
-            <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data" onsubmit="return checkPin()">
-                {% csrf_token %}
-                <input type="text" id="descInput" name="description" placeholder="Enter description">
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                <div id="preview-container">
-                    <img id="preview" src="#" alt="Preview">
+            <div id="right-half-container">
+                <header id="right-half-header">
+                    <h1>Report Litter</h1>
+                </header>
+                <div id="right-half-content">
+                    <!-- Content for the right half goes here -->
+                    <h2>Double click on the map to drop a pin!</h2>
+                    <h2>Write a short description of the litter.</h2>
+                    <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data" onsubmit="return checkPin()">
+                        {% csrf_token %}
+                        <input type="text" id="descInput" name="description" placeholder="Enter description">
+                        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+                        <div id="preview-container">
+                            <img id="preview" src="#" alt="Preview">
+                        </div>
+                        <!-- Add hidden input fields for latitude, longitude, and zip code -->
+                        <input type="hidden" id="latitudeInput" name="latitude">
+                        <input type="hidden" id="longitudeInput" name="longitude">
+                        <input type="hidden" id="zipCodeInput" name="zip_code">
+                        <button type="submit" id="submitButton">Submit</button>
+                        <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
+                    </form>
                 </div>
-                <!-- Add hidden input fields for latitude, longitude, and zip code -->
-                <input type="hidden" id="latitudeInput" name="latitude">
-                <input type="hidden" id="longitudeInput" name="longitude">
-                <input type="hidden" id="zipCodeInput" name="zip_code">
-                <button type="submit" id="submitButton">Submit</button>
-                <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
-            </form>
+            </div>
         </div>
     </div>
 
