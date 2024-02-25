@@ -1,49 +1,121 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello, World!</title>
-    <style>
-    /* Style the navbar */
-     nav {
-            background-color: mediumseagreen;
-            padding: 10px 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clean Litter</title>
+  <!-- Add Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-        /* Style the navigation links */
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+    .container {
+      margin-top: 20px;
+    }
 
-        nav ul li {
-            display: inline; /* Display list items horizontally */
-        }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
 
-        nav ul li a {
-            color: ivory;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
 
-        nav ul li a:hover {
-            background-color: seagreen;
-        }
-    </style>
+    li {
+      margin-bottom: 10px;
+    }
 
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 10px;
+      border: 2px solid #000;
+      background-color: #f0f0f0;
+      text-decoration: none;
+      color: #000;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .logo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 300px;
+      height: auto;
+    }
+
+    #map {
+      height: 75vh;
+      width: auto;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
+
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
-            <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
-        </ul>
-    </nav>
-    <h1>Hello, World!</h1>
+  <div class="container">
+    <h1>Current ZIP Code: {{zip_code}}</h1>
+    <p>Total Litter in your ZIP Code: {{ pins_with_zip|length }}</p>
+    <!-- Display the count of pins with the user's zip code -->
+    <ul>
+      {% for pin in pins_with_zip %}
+      <li>
+        <!-- Removed Description, Latitude, and Longitude display -->
+      </li>
+      {% empty %}
+      <li>No pins found with this zip code.</li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="button">Back to Home</a>
+  </div>
+
+  <!-- Leaflet Map -->
+  <div id="map"></div>
+
+  <!-- Add Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Your Leaflet map script here -->
+  <script>
+    // Initialize the map
+    var userLatitude = localStorage.getItem('user_latitude');
+    var userLongitude = localStorage.getItem('user_longitude');
+    var map = L.map('map').setView([userLatitude, userLongitude], 16); // Initialize with default center (New York)
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Retrieve pins from the JSON data and add markers to the map
+    var json_pins = JSON.parse('{{ json_pins|escapejs }}'); // Parse the JSON data
+    json_pins.forEach(function (pin) {
+      // Create an anchor tag for each pin marker that redirects to pin_view page with pin id
+      var marker = L.marker([pin.fields.lat, pin.fields.long]).addTo(map);
+      var pinId = pin.pk; // Assuming the primary key of the pin object is used as the pin number
+      marker.bindPopup(`<a href="/pin_view/${pinId}" class="marker-button">View Pin ${pinId}</a>`);
+    });
+
+    // Fit map bounds to include all markers
+    var bounds = new L.LatLngBounds(json_pins.map(function (pin) {
+      return [pin.fields.lat, pin.fields.long];
+    }));
+    map.fitBounds(bounds);
+  </script>
+
 </body>
+
 </html>
