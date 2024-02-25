@@ -2,275 +2,300 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Litter</title>
-    <!-- Include Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <!-- Include Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Litter</title>
+  <!-- Include Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Include Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      overflow: hidden;
+    }
 
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        }
+    header {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
 
-        .container {
-            display: flex;
-            flex: 1;
-        }
+    .container {
+      display: flex;
+      flex: 1;
+    }
 
-        .half {
-            flex: 1;
-            overflow: hidden;
-        }
+    .half {
+      flex: 1;
+      overflow: hidden;
+    }
 
-        #left-half {
-            background-color: #e0e0e0;
-        }
+    #left-half {
+      background-color: #e0e0e0;
+    }
 
-        #right-half {
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            display: flex;
-        }
+    #right-half {
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      display: flex;
+    }
 
-        #map {
-            height: 100%; /* Adjust height as needed */
-            width: 100%;
-        }
+    #map {
+      height: 100%;
+      /* Adjust height as needed */
+      width: 100%;
+    }
 
-        #preview-container {
-            margin-top: 10px;
-        }
+    #preview-container {
+      margin-top: 10px;
+    }
 
-        #preview {
-            max-width: 100%;
-            height: auto;
-            display: none; /* Hide the image initially */
-        }
+    #preview {
+      max-width: 100%;
+      height: auto;
+      display: none;
+      /* Hide the image initially */
+    }
 
-        .input-container {
-            margin-top: 20px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .input-container {
+      margin-top: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        .input-container input[type="text"] {
-            width: 80%;
-            margin-bottom: 10px;
-        }
+    .input-container input[type="text"] {
+      width: 80%;
+      margin-bottom: 10px;
+    }
 
-        .input-container input[type="file"] {
-            width: 80%;
-        }
+    .input-container input[type="file"] {
+      width: 80%;
+    }
 
-        .input-container button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 18px;
-            border: 2px solid #000;
-            background-color: #f0f0f0;
-            cursor: pointer;
-        }
+    .input-container button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: 2px solid #000;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
 
-        .input-container button:hover {
-            background-color: #e0e0e0;
-        }
+    .input-container button:hover {
+      background-color: #e0e0e0;
+    }
 
-        .error-message {
-            color: red;
-            margin-top: 5px;
-            display: none;
-        }
-        /* Style the navbar */
-     nav {
-            background-color: mediumseagreen;
-            padding: 10px 0;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        }
+    .error-message {
+      color: red;
+      margin-top: 5px;
+      display: none;
+    }
 
-        /* Style the navigation links */
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+    /* Style the navbar */
+    nav {
+      background-color: mediumseagreen;
+      padding: 10px 0;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
 
-        nav ul li {
-            display: inline; /* Display list items horizontally */
-        }
+    /* Style the navigation links */
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
 
-        nav ul li a {
-            color: ivory;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
+    nav ul li {
+      display: inline;
+      /* Display list items horizontally */
+    }
 
-        nav ul li a:hover {
-            background-color: seagreen;
-        }
-    </style>
+    nav ul li a {
+      color: ivory;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    nav ul li a:hover {
+      background-color: seagreen;
+    }
+  </style>
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
-            <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
-        </ul>
-    </nav>
-        
-    <div class="container">
-        <div class="half" id="left-half">
-            <!-- Content for the left half goes here -->
-            <div id="map"></div>
-        </div>
-        <div class="half" id="right-half">
-            <!-- Content for the right half goes here -->
-            <h1>Report Litter</h1>
-            <h2>Double click on the map to drop a pin!</h2>
-            <h2>Write a short description of the litter.</h2>
-            <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data" onsubmit="return checkPin()">
-                {% csrf_token %}
-                <input type="text" id="descInput" name="description" placeholder="Enter description">
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                <div id="preview-container" style="overflow: hidden; max-height: 30%;" >
-                    <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 100%;">
-                </div>
-                <!-- Add hidden input fields for latitude, longitude, and zip code -->
-                <input type="hidden" id="latitudeInput" name="latitude">
-                <input type="hidden" id="longitudeInput" name="longitude">
-                <input type="hidden" id="zipCodeInput" name="zip_code">
-                <button type="submit" id="submitButton">Submit</button>
-                <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
-            </form>
-        </div>
+  <nav>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'report_litter' %}">Report Litter</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="half" id="left-half">
+      <!-- Content for the left half goes here -->
+      <div id="map"></div>
     </div>
+    <div class="half" id="right-half">
+      <!-- Content for the right half goes here -->
+      <h1>Report Litter</h1>
+      <h2>Double click on the map to drop a pin!</h2>
+      <h2>Write a short description of the litter.</h2>
+      <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data"
+        onsubmit="return checkPin()">
+        {% csrf_token %}
+        <input type="text" id="descInput" name="description" placeholder="Enter description">
+        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+        <div id="preview-container" style="overflow: hidden; max-height: 30%;">
+          <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 100%;">
+        </div>
+        <!-- Add hidden input fields for latitude, longitude, and zip code -->
+        <input type="hidden" id="latitudeInput" name="latitude">
+        <input type="hidden" id="longitudeInput" name="longitude">
+        <input type="hidden" id="zipCodeInput" name="zip_code">
+        <button type="submit" id="submitButton">Submit</button>
+        <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
+      </form>
+    </div>
+  </div>
+  <div class="half" id="right-half">
+    <!-- Content for the right half goes here -->
+    <h2>Double click on the map to drop a pin!</h2>
+    <h2>Write a short description of the litter.</h2>
+    <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data"
+      onsubmit="return checkPin()">
+      {% csrf_token %}
+      <input type="text" id="descInput" name="description" placeholder="Enter description">
+      <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+      <div id="preview-container">
+        <img id="preview" src="#" alt="Preview">
+      </div>
+      <!-- Add hidden input fields for latitude, longitude, and zip code -->
+      <input type="hidden" id="latitudeInput" name="latitude">
+      <input type="hidden" id="longitudeInput" name="longitude">
+      <input type="hidden" id="zipCodeInput" name="zip_code">
+      <button type="submit" id="submitButton">Submit</button>
+      <p class="error-message" id="pinErrorMessage">Please place a pin before submitting!</p>
+    </form>
+  </div>
+  </div>
 
-    <script>
-        // Initialize the map
-        var map = L.map('map');
+  <script>
+    // Initialize the map
+    var map = L.map('map');
 
-        // Variable to store the last added marker
-        var lastMarker = null;
-        var lat = null;
-        var lng = null;
+    // Variable to store the last added marker
+    var lastMarker = null;
+    var lat = null;
+    var lng = null;
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-        // Function to handle mouse down event
-        function onMouseDown(e) {
-            if (e.originalEvent.detail === 2) { // Check if it's a double-click
-                // Remove the last added marker, if exists
-                if (lastMarker) {
-                    map.removeLayer(lastMarker);
-                }
-
-                // Add a new marker
-                lastMarker = L.marker(e.latlng).addTo(map);
-                lat = e.latlng.lat;
-                lng = e.latlng.lng;
-
-                // Fetch zip code and display
-                fetchZipCode(lat, lng);
-
-                // Set latitude and longitude in hidden input fields
-                document.getElementById('latitudeInput').value = lat;
-                document.getElementById('longitudeInput').value = lng;
-
-                // Hide pin error message
-                document.getElementById('pinErrorMessage').style.display = 'none';
-            }
+    // Function to handle mouse down event
+    function onMouseDown(e) {
+      if (e.originalEvent.detail === 2) { // Check if it's a double-click
+        // Remove the last added marker, if exists
+        if (lastMarker) {
+          map.removeLayer(lastMarker);
         }
 
-        // Function to fetch zip code from latitude and longitude
-        function fetchZipCode(lat, lng) {
-            var xhr = new XMLHttpRequest();
-            var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
-            xhr.open('GET', url, true);
-            xhr.onload = function () {
-                var data = JSON.parse(this.responseText);
-                if (data.address && data.address.postcode) {
-                    var zipCode = data.address.postcode;
-                    lastMarker.bindTooltip(zipCode).openTooltip();
-                    // Set zip code in hidden input field
-                    document.getElementById('zipCodeInput').value = zipCode;
-                }
-            };
-            xhr.send();
+        // Add a new marker
+        lastMarker = L.marker(e.latlng).addTo(map);
+        lat = e.latlng.lat;
+        lng = e.latlng.lng;
+
+        // Fetch zip code and display
+        fetchZipCode(lat, lng);
+
+        // Set latitude and longitude in hidden input fields
+        document.getElementById('latitudeInput').value = lat;
+        document.getElementById('longitudeInput').value = lng;
+
+        // Hide pin error message
+        document.getElementById('pinErrorMessage').style.display = 'none';
+      }
+    }
+
+    // Function to fetch zip code from latitude and longitude
+    function fetchZipCode(lat, lng) {
+      var xhr = new XMLHttpRequest();
+      var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+      xhr.open('GET', url, true);
+      xhr.onload = function () {
+        var data = JSON.parse(this.responseText);
+        if (data.address && data.address.postcode) {
+          var zipCode = data.address.postcode;
+          lastMarker.bindTooltip(zipCode).openTooltip();
+          // Set zip code in hidden input field
+          document.getElementById('zipCodeInput').value = zipCode;
         }
+      };
+      xhr.send();
+    }
 
-        // Function to handle geolocation success
-        function onLocationFound(e) {
-            var radius = e.accuracy / 2;
+    // Function to handle geolocation success
+    function onLocationFound(e) {
+      var radius = e.accuracy / 2;
+    }
+
+    // Function to handle geolocation error
+    function onLocationError(e) {
+      alert(e.message);
+    }
+
+    // Attempt to get user's current location
+    map.locate({ setView: true, maxZoom: 16 });
+
+    // Bind geolocation events
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+    map.on('mousedown', onMouseDown);
+
+    // Disable default Leaflet behavior for double-click
+    map.doubleClickZoom.disable();
+
+    // Function to preview the selected image
+    function previewImage(event) {
+      var input = event.target;
+      var preview = document.getElementById('preview');
+
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block'; // Show the preview image
         }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
-        // Function to handle geolocation error
-        function onLocationError(e) {
-            alert(e.message);
-        }
-
-        // Attempt to get user's current location
-        map.locate({ setView: true, maxZoom: 16 });
-
-        // Bind geolocation events
-        map.on('locationfound', onLocationFound);
-        map.on('locationerror', onLocationError);
-        map.on('mousedown', onMouseDown);
-
-        // Disable default Leaflet behavior for double-click
-        map.doubleClickZoom.disable();
-
-        // Function to preview the selected image
-        function previewImage(event) {
-            var input = event.target;
-            var preview = document.getElementById('preview');
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block'; // Show the preview image
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Function to check if a pin is placed before submission
-        function checkPin() {
-            if (!lastMarker) {
-                document.getElementById('pinErrorMessage').style.display = 'block';
-                return false; // Prevent form submission
-            }
-            return true; // Allow form submission
-        }
-    </script>
+    // Function to check if a pin is placed before submission
+    function checkPin() {
+      if (!lastMarker) {
+        document.getElementById('pinErrorMessage').style.display = 'block';
+        return false; // Prevent form submission
+      }
+      return true; // Allow form submission
+    }
+  </script>
 </body>
 
 </html>
