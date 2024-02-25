@@ -4,3 +4,4 @@ test.py
 *.pyc
 *.sqlite3
 dump.html
+/siteenv/*
