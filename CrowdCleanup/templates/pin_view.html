@@ -142,7 +142,8 @@
         <img src="{{pin.image.url}}">
       </div>
       <p>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</p>
-      <form action="/pin_view/{{pin.id}}" method="post"></form>
+      <form action="{% url 'pin_view' pin.id %}" method="post">
+      {% csrf_token %}
       <button type="submit" class="bottom-button">Mark as cleaned</button>
       </form>
     </div>
