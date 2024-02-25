@@ -17,6 +17,7 @@
             height: 100vh;
             flex-direction: column;
             font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            overflow: hidden;
         }
 
         header {
@@ -48,6 +49,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            display: flex;
         }
 
         #map {
@@ -140,9 +142,7 @@
             <li><a href="{% url 'clean_litter' %}">Clean Up Litter</a></li>
         </ul>
     </nav>
-    <header>
-        <h1>Report Litter</h1>
-    </header>
+        
     <div class="container">
         <div class="half" id="left-half">
             <!-- Content for the left half goes here -->
@@ -150,14 +150,15 @@
         </div>
         <div class="half" id="right-half">
             <!-- Content for the right half goes here -->
+            <h1>Report Litter</h1>
             <h2>Double click on the map to drop a pin!</h2>
             <h2>Write a short description of the litter.</h2>
             <form class="input-container" action="{% url 'report_litter' %}" method="post" enctype="multipart/form-data" onsubmit="return checkPin()">
                 {% csrf_token %}
                 <input type="text" id="descInput" name="description" placeholder="Enter description">
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                <div id="preview-container">
-                    <img id="preview" src="#" alt="Preview">
+                <div id="preview-container" style="overflow: hidden; max-height: 30%;" >
+                    <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 100%;">
                 </div>
                 <!-- Add hidden input fields for latitude, longitude, and zip code -->
                 <input type="hidden" id="latitudeInput" name="latitude">
