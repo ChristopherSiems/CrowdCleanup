@@ -12,18 +12,35 @@
 
   <style>
     body {
+      background-color: ivory;
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      /* Set body height to 100% of the viewport */
+      min-height: 100vh;
+      overflow: hidden;
     }
 
     .split-container {
       flex: 1;
       display: flex;
       width: 100%;
+    }
+
+    .image-container {
+      width: 100%;
+      height: 33%;
+      overflow: hidden;
+      /* Hide overflow content */
+    }
+
+    .image-container img {
+      width: 100%;
+      /* Make the image fill the container width */
+      height: 100%;
+      /* Make the image fill the container height */
+      object-fit: cover;
+      /* Crop the image to cover the container */
     }
 
     .left-side {
@@ -39,7 +56,29 @@
       flex-grow: 1;
       margin-left: 8px;
       margin-right: 8px;
-      /* Allow the panes to grow and fill the remaining space */
+      flex-direction: column;
+      padding-bottom: 8px;
+    }
+
+    .bottom-button {
+      bottom: 16px;
+      border: 0;
+      color: ivory;
+      background-color: seagreen;
+      font-size: larger;
+      padding: auto;
+      border-radius: 16px;
+      padding: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .bottom-button:hover {
+      cursor: pointer;
+    }
+
+    .main {
+      font-size: larger;
     }
 
     #map {
@@ -61,9 +100,14 @@
         <span style="float: right;">{{pin.date|date:"Y-m-d"}}</span>
       </p>
       <br>
-      <p>{{pin.description}}</p>
-      <img src="{{pin.image}}" alt="">
-      <address>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</address>
+      <p class="main">{{pin.description}}</p>
+      <div class="image-container">
+        <img src="{{pin.image.url}}">
+      </div>
+      <p>Latitude: {{pin.lat}}<span style="margin-right: 32px;"></span>Longitude: {{pin.long}}</p>
+      <form action="/pin_view/{{pin.id}}" method="post"></form>
+      <button type="submit" class="bottom-button">Mark as cleaned</button>
+      </form>
     </div>
   </div>
 
