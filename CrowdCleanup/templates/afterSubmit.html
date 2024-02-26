@@ -8,14 +8,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thanks for Making the World a Little Cleaner</title>
   <style>
+    html,
     body {
+      height: 100%;
       font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-      text-align: center;
-      background-color: ivory;
+      background-image: url('{% static "home.png" %}');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      margin: auto;
+      /* Reset default margin */
+      padding: 0;
+      /* Reset default padding */
     }
 
     .container {
+      text-align: center;
+      margin: auto;
       margin-top: 100px;
+      width: 50%;
+      height: 20vh;
+      background-color: ivory;
+      border: solid;
+      border-radius: 16px;
     }
 
     h1 {
@@ -89,6 +104,7 @@
     <h1>Thanks for Making the World a Little Cleaner :)</h1>
     <a href="{% url 'report_litter' %}" class="button">Submit Litter</a>
     <a href="{% url 'home' %}" class="button">Return Home</a>
+
   </div>
 </body>
 
